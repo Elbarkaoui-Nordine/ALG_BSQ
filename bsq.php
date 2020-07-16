@@ -1,57 +1,91 @@
 <?php
 
-$grid = file_get_contents('./example_file3');
+$grid = file_get_contents('./example_file4');
 
-$grid = explode("\n","23
-...........o..............o.......oo....
-...o..o.........o...........o...o.....oo
-..o.........o...o....o...o..............
-...o..............o..o..............o...
-.............o.....o.........o...o.o..o.
-.......oo.o.............................
-........o......o..........o........o....
-......o......o....o......o...oo...o.....
-....o..o............................oo..
-....o.....o...........o...o.............
-o..............o......ooo..o............
-o....o......................o...o....o..
-....................o...........o.......
-...o.............o.o.ooo..............o.
-...o...o.o..ooo......................o.o
-...............o.......o...........o.o..
-.............o.....o..o....o..........o.
-o.........o..........o.....o.o...o......
-o.o.oo.o.................o.....o.....o.o
-.o....o........................o........
-............o...........o.........o.....
-..........o.......o.....................
-..oo...o.....o........o.......o.....o...");
+// $grid = explode("\n","23
+// ...........................
+// ....o......................
+// ............o..............
+// ...........................
+// ....o......................
+// ...............o...........
+// ...........................
+// ......o..............o.....
+// ..o.......o................");
 
 
-$nCol = $grid[0];
-unset($grid[0]);
-$grid = array_values($grid);
-for( $i = 0 ; $i < count($grid) ; $i++ ){
-    $grid[$i] = str_split($grid[$i],1);
-}
-
-
-
-
-$grids = [];
-
-//stock x et y + length
-
-for( $y = 0 ; $y < count($grid) ; $y++ ){
-
-    for( $x = 0 ; $x < count($grid[$y]) ; $x++ ){
-       echo $y." - ".$x."\n";
+function GridCrosser($grid){
+    $grid = explode("\n",$grid);
+    unset($grid[0]);
+    $grid = array_values($grid);
+    for( $i = 0 ; $i < count($grid) ; $i++ ){
+        $grid[$i] = str_split($grid[$i],1);
     }
+
+    $maxLength = 0;
+    $posX = 0;
+    $posY = 0;
+    for( $y = 0 ; $y < count($grid) ; $y++ ){ 
+
+        for( $x = 0 ; $x < count($grid[$y]) ; $x++ ){ 
+        
+            if( $grid[$y][$x] == '.'){ 
+            
+                $length = 1;
+                $a = 0; 
+                $find = false;
+    
+                for( $i = 1 ; $i < (count($grid[$y]) - $x) ; $i++ ){
+
+                    if(isset($grid[$y+$i]) && isset($grid[$y+$i][$x+$i])  ){
+                
+                        if( $grid[$y][$x+$i] == '.'  && $grid[$y+$i][$x] == '.'   && $grid[$y+$i][$x+$i] == '.' ){
+
+                            for ($j = 1; $j < $a+1; $j++) {
+                                if($grid[$y+$i][$x+$j] == 'o' ||    $grid[$y+$j][$x+$i] == 'o'){
+                                    $find = true;
+                                }
+        
+                            }
+
+                            if($find){
+                                break;
+                            }
+                            else{            
+                                $length ++;
+                                if( $length > $maxLength  ){
+                                    $maxLength = $length;
+                                    $posX = $x;
+                                    $posY = $y;   
+                                }
+                            } 
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    else{
+                        break;
+                    }      
+                    $a++;
+                }
+            }   
+        }
+    }
+
+    for($i = 0 ; $i < $maxLength ; $i++ ){
+        for( $j = 0 ; $j < $maxLength ; $j++ ){
+            $grid[$posY+$i][$posX+$j] = 'x';
+        }
+    }
+
+    for( $i = 0 ; $i < count($grid) ; $i++){
+        $grid[$i] = implode($grid[$i]);
+    }
+
+    $grid = implode("\n",$grid);
+
+    return $grid;
 }
 
-
-
-
-
-
-
+echo GridCrosser($grid);
