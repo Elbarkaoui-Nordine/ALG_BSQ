@@ -1,9 +1,6 @@
 <?php
 
-$grid = file_get_contents('./example_file2');
-
-
-
+$grid = file_get_contents('./example_file6');
 
 function GridCrosser($grid){
     $grid = explode("\n",$grid);
@@ -22,8 +19,7 @@ function GridCrosser($grid){
         
             if( $grid[$y][$x] == '.'){ 
             
-                $length = 1;
-                $a = 0; 
+                $length = 1; 
                 $find = false;
     
                 for( $i = 1 ; $i < (count($grid[$y]) - $x) ; $i++ ){
@@ -32,11 +28,10 @@ function GridCrosser($grid){
                 
                         if( $grid[$y][$x+$i] == '.'  && $grid[$y+$i][$x] == '.'   && $grid[$y+$i][$x+$i] == '.' ){
 
-                            for ($j = 1; $j < $a+1; $j++) {
+                            for ($j = 1; $j < $i; $j++) {
                                 if($grid[$y+$i][$x+$j] == 'o' ||    $grid[$y+$j][$x+$i] == 'o'){
                                     $find = true;
                                 }
-        
                             }
 
                             if($find){
@@ -58,7 +53,6 @@ function GridCrosser($grid){
                     else{
                         break;
                     }      
-                    $a++;
                 }
             }   
         }
