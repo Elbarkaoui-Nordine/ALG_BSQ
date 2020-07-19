@@ -1,6 +1,6 @@
 <?php
 
-$grid = file_get_contents('./example_file6');
+$grid = file_get_contents('./example_file');
 
 function GridCrosser($grid){
     $grid = explode("\n",$grid);
